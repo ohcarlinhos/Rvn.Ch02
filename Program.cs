@@ -9,6 +9,7 @@ var store = new DocumentStore()
 
 store.Initialize();
 
+// task: create
 using (var session = store.OpenSession())
 {
     var task = new ToDoTask()
@@ -16,11 +17,12 @@ using (var session = store.OpenSession())
         DueDate = DateTime.Now.AddDays(1),
         Task = "Nada de mais"
     };
-    
+
     session.Store(task);
     session.SaveChanges();
 }
 
+// task: update
 using (var session = store.OpenSession())
 {
     var task = session.Load<ToDoTask>("ToDoTasks/1-A");
@@ -42,7 +44,7 @@ using (var session = store.OpenSession())
     session.SaveChanges();
 }
 
-
+// task: list
 using (var session = store.OpenSession())
 {
     var taskToDo =
@@ -61,6 +63,7 @@ using (var session = store.OpenSession())
     }
 }
 
+// task: list
 using (var session = store.OpenSession())
 {
     var tasksPerDay =
@@ -79,4 +82,22 @@ using (var session = store.OpenSession())
     {
         Console.WriteLine($"{tpd.DueDate} - {tpd.TasksPerDate}");
     }
+}
+
+// person: create
+using (var session = store.OpenSession())
+{
+    var person = new Person { Name = "John Doe" };
+    session.Store(person);
+
+    var task = new ToDoTask
+    {
+        DueDate = DateTime.Now.AddDays(1),
+        Task = "Nada de mais...",
+        AssignedTo = person.Id,
+        CreatedBy = person.Id
+    };
+    session.Store(task);
+    
+    session.SaveChanges();
 }
